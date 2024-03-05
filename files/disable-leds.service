@@ -1,0 +1,10 @@
+[Unit]
+Description=SystemD Unit to disable the Raspberry Pi 3 Power|Activity|Ethernet LEDs
+Documentation=https://github.com/nicholasvmoore/riverhouse-pi
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/disable_leds_rpi3.sh
+
+[Install]
+WantedBy=multi-user.target
