@@ -1,0 +1,6 @@
+---
+# Location where confguration files will be stored.
+config_dir: '~'
+
+domain_name_enable: false
+domain_name: river.moorenix.com

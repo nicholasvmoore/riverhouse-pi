@@ -1,0 +1,45 @@
+---
+- name: Configure VPN RockPi-E.
+  hosts: vpn
+  become: true
+
+  pre_tasks:
+    - name: Load configuration
+      ansible.builtin.include_vars: "{{ item }}"
+      loop:
+        - config.yml
+
+    - name: Ensure apt cache is up to date.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when:
+        - ansible_facts.os_family == "Debian"
+
+    - name: Set zsh as user shell
+      become: true
+      user:
+        name: nicholas
+        shell: /bin/zsh
+
+  tasks:
+    - name: Install tools and utilities
+      ansible.builtin.apt:
+        name:
+          - build-essential
+          - zsh
+          - tcpdump
+          - tmux
+          - htop
+          - net-tools
+          - iptraf-ng
+          - iperf3
+          - iptables
+          - vim
+        state: present
+
+    - name: Disable LEDs
+      ansible.builtin.import_tasks: tasks/disable_leds.yml
+      tags:
+        - disable_leds
+    

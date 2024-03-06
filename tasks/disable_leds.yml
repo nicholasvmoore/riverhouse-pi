@@ -1,0 +1,42 @@
+---
+- name: Install dependencies for lan951x-led-ctl
+  ansible.builtin.apt:
+    name:
+      - libusb-1.0-0-dev
+
+- name: Clone lan951x-led-ctl Repository
+  ansible.builtin.git:
+    repo: https://github.com/dumpsite/lan951x-led-ctl.git
+    dest: ~/git/lan951x-led-ctl
+    depth: 1
+
+- name: Compile lan951x-led-ctl
+  community.general.make:
+    chdir: ~/git/lan951x-led-ctl
+    targets: install
+  become: true
+
+- name: Copy Disable LED Script
+  ansible.builtin.copy:
+    src: files/disable_leds_rpi3.sh
+    dest: /usr/local/bin/disable_leds_rpi3.sh
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: Copy Disable LED systemd unit
+  ansible.builtin.copy:
+    src: files/disable-leds.service
+    dest: /etc/systemd/system/disable-leds.service
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: Enable disable-leds.service systemd unit
+  ansible.builtin.systemd_service:
+    name: disable-leds.service
+    enabled: true
+    daemon_reload: true
+    state: started
