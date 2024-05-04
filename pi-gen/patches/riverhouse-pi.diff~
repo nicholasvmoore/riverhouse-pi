@@ -1,0 +1,60 @@
+Modifying the pi-gen build directory for the necessary changes to build a raspberrypi-lite image for the Raspberry Pi Zero 2w with the Waveshare PoE hat.
+Index: pi-gen/pi-gen/stage0/02-firmware/01-packages
+===================================================================
+--- pi-gen.orig/pi-gen/stage0/02-firmware/01-packages
++++ pi-gen/pi-gen/stage0/02-firmware/01-packages
+@@ -1,9 +1,4 @@
+ initramfs-tools
+ raspi-firmware
+-linux-image-rpi-v6
+ linux-image-rpi-v7
+-linux-image-rpi-v7l
+-linux-image-rpi-v8
+-linux-headers-rpi-v6
+-linux-headers-rpi-v7
+-linux-headers-rpi-v7l
++linux-headers-rpi-v7
+\ No newline at end of file
+Index: pi-gen/pi-gen/stage1/00-boot-files/files/config.txt
+===================================================================
+--- pi-gen.orig/pi-gen/stage1/00-boot-files/files/config.txt
++++ pi-gen/pi-gen/stage1/00-boot-files/files/config.txt
+@@ -40,7 +40,7 @@ arm_boost=1
+ # Enable host mode on the 2711 built-in XHCI USB controller.
+ # This line should be removed if the legacy DWC2 controller is required
+ # (e.g. for USB device mode) or if USB support is not required.
+-otg_mode=1
++#xotg_mode=1
+ 
+ [all]
+-
++dtoverlay=dwc2,dr_mode=host
+Index: pi-gen/pi-gen/stage2/01-sys-tweaks/00-patches/07-resize-init.diff
+===================================================================
+--- pi-gen.orig/pi-gen/stage2/01-sys-tweaks/00-patches/07-resize-init.diff
++++ pi-gen/pi-gen/stage2/01-sys-tweaks/00-patches/07-resize-init.diff
+@@ -2,4 +2,4 @@
+ +++ stage2/rootfs/boot/firmware/cmdline.txt
+ @@ -1 +1 @@
+ -console=serial0,115200 console=tty1 root=ROOTDEV rootfstype=ext4 fsck.repair=yes rootwait
+-+console=serial0,115200 console=tty1 root=ROOTDEV rootfstype=ext4 fsck.repair=yes rootwait quiet init=/usr/lib/raspberrypi-sys-mods/firstboot
+++console=serial0,115200 console=tty1 root=ROOTDEV rootfstype=ext4 fsck.repair=yes rootwait quiet init=/usr/lib/raspberrypi-sys-mods/firstboot module-load=dwc2,g_ether
+Index: pi-gen/pi-gen/config
+===================================================================
+--- /dev/null
++++ pi-gen/pi-gen/config
+@@ -0,0 +1,13 @@
++IMG_NAME="riverhouse-pi"
++DEPLOY_COMPRESSION="xz"
++LOCALE_DEFAULT="en_US.UTF-8"
++TARGET_HOSTNAME="riverhouse-pi"
++KEYBOARD_KEYMAP="us"
++KEYBOARD_LAYOUT="English (US)"
++TIMEZONE_DEFAULT="America/Chicago"
++FIRST_USER_NAME="nicholas"
++DISABLE_FIRST_BOOT_USER_RENAME=1
++ENABLE_SSH=1
++STAGE_LIST="stage0 stage1 stage2"
++PUBKEY_SSH_FIRST_USER="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAZFjS2cZU5XADXKGga8tIPdrSjy1guUGW5o5kDn0dcKJODYk30dC635btTw2tiD3/QpNz9STfVpkWTMR5wASQ4fbhoWHgUMXn/GC6Z5+BQ86n5X9jNCGWocQhL5WdJqmoumjpSh/ZOnztPbZawploFdYD8EJCcpRGSPQeisiJv1AgC3OGw9jC78SW+70w55qbK+xtqVtn2AwzdrlXv9PgJOeZDSsaDvJHzrGQd7FEVMcjjDkf6tLMGFjoZUwcAZxQrXMl0q09+bdDXn8u6ZfAGlUQRygwxXdsZ9eYajlLCFV3OC643imGJ26xLFQNW9D3xrmDE2RBrbTK8lZDoeH5 nicholas@Nicholass-MBP"
++PUBKEY_ONLY_SSH=1
+\ No newline at end of file
