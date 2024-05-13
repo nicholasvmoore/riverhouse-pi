@@ -1,6 +1,7 @@
 name: build-riverhouse-pi-image
 run-name: ${{ github.actor }} is building a new riverhouse-pi-image
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'pi-gen/patches/**'
@@ -10,11 +11,15 @@ jobs:
     runs-on: [self-hosted, linux, docker]
     steps:
       - name: Clone pi-gen Repo
-        working-directory: ./pi-gen/
+        working-directory: pi-gen/
         run: git clone --depth 1 https://github.com/RPI-Distro/pi-gen.git
       - name: Run Quilt
-        working-directory: ./pi-gen
+        working-directory: pi-gen
         run: quilt push riverhouse-pi.diff
       - name: Build container
-        working-directory: ./pi-gen/pi-gen/
+        working-directory: pi-gen/pi-gen/
         run: build-docker.sh
+      - name: Copy Container
+        working-directory: pi-gen/pi-gen/
+        run: |
+          mv deploy /mnt/lun0/software/
