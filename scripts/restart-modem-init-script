@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+
+START=99
+STOP=01
+
+start_service() {
+    procd_open_instance
+    ./etc/profile
+    echo "Starting modem python script"
+    ubus -t 300 wait_for network.interface.modem_0001_4
+    python /root/restart-modem.py &
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+}
