@@ -1,0 +1,15 @@
+riverhouse:
+  hosts:
+    pi-zero:
+      ansible_host: 192.168.24.2
+      ansible_user: nicholas
+  vars:
+    nut_ups_ups_name: "ups0"
+    nut_ups_ups_idVendor: "09ae" # Tripp Lite
+    nut_ups_ups_idProduct: "3024" # INTERNET600U
+    nut_ups_ups_model_name: "INTERNET600U"
+    nut_ups_os_nut_group: "nut"
+    nut_ups_mode: "netserver"
+    nut_ups_listen_address: 0.0.0.0
+    nut_upsd_user: "nicholas"
+    nut_upsd_user_password: "password" # TODO: Replace with github secret

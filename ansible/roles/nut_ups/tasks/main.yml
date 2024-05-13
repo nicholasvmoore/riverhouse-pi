@@ -1,0 +1,81 @@
+- name: Setup udev rules
+  ansible.builtin.template:
+    src: templates/99-nut-ups-usb-serial.rules.j2
+    dest: "/etc/udev/rules.d/99-nut-ups-usb-serial.rules"
+    owner: root
+    group: root
+    mode: "0600"
+  become: true
+  notify:
+    - Reload udev rules
+    - Trigger udevadm
+
+- name: Install nut tools
+  ansible.builtin.package:
+    name:
+      - nut
+      - nut-server
+      - nut-client
+
+- name: Configuring nut-server
+  ansible.builtin.template:
+    src: templates/nut.conf.j2
+    dest: "/etc/nut/nut.conf"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+
+- name: Configure {{ nut_ups_ups_name }}
+  ansible.builtin.template:
+    src: templates/ups.conf.j2
+    dest: "/etc/nut/ups.conf"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+  notify:
+    - Restart nut-monitor
+
+- name: Configuring nut-sever networking
+  ansible.builtin.template:
+    src: templates/upsd.conf.j2
+    dest: "/etc/nut/upsd.conf"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+  notify:
+    - Restart nut-server
+
+- name: Configure NUT Hosts
+  ansible.builtin.template:
+    src: templates/hosts.conf.j2
+    dest: "/etc/nut/hosts.conf"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+  notify:
+    - Restart nut-monitor
+
+- name: Configuring NUT User
+  ansible.builtin.template:
+    src: templates/upsd.users.j2
+    dest: "/etc/nut/upsd.users"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+
+- name: Configuring NUT UPS Monitor
+  ansible.builtin.template:
+    src: templates/upsmon.conf.j2
+    dest: "/etc/nut/upsmon.conf"
+    owner: root
+    group: nut
+    mode: "0640"
+  become: true
+  notify:
+    - Restart nut-server
+    - Restart nut-monitor

@@ -10,16 +10,29 @@ jobs:
   build-riverhouse-pi-image:
     runs-on: [self-hosted, linux, docker]
     steps:
-      - name: Clone pi-gen Repo
-        working-directory: pi-gen/
-        run: git clone --depth 1 https://github.com/RPI-Distro/pi-gen.git
-      - name: Run Quilt
+      - name: Cloning ${{ vars.GITHUB_REPOSITORY }}
+        uses: actions/checkout@v4
+        with:
+          repository: 'nicholasvmoore/riverhouse-pi'
+      - name: Cloning RPI-Distro/pi-gen
+        uses: actions/checkout@v4
+        with: 
+          repository: 'RPI-Distro/pi-gen'
+          path: pi-gen/pi-gen
+      - name: Patch RPI-Distro/pi-gen for riverhouse-pi
         working-directory: pi-gen
-        run: quilt push riverhouse-pi.diff
-      - name: Build container
-        working-directory: pi-gen/pi-gen/
-        run: build-docker.sh
-      - name: Copy Container
-        working-directory: pi-gen/pi-gen/
         run: |
-          mv deploy /mnt/lun0/software/
+          quilt push --refresh riverhouse-pi.diff || true
+          find pi-gen -type f ! -perm -u+x -name "*.sh" -exec chmod a+x {} \; -printf "Making %p executable\n"
+      - name: Build Image
+        working-directory: pi-gen
+        run: |
+          sh pi-gen/build-docker.sh
+      - name: Uploading image to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: riverhouse-pi-image
+          path: pi-gen/deploy/*
+      - name: Clean-up deploy folder
+        working-directory: pi-gen
+        run: rm -rf deploy

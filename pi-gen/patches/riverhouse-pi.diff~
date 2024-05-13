@@ -43,7 +43,7 @@ Index: pi-gen/pi-gen/config
 ===================================================================
 --- /dev/null
 +++ pi-gen/pi-gen/config
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,15 @@
 +IMG_NAME="riverhouse-pi"
 +DEPLOY_COMPRESSION="xz"
 +LOCALE_DEFAULT="en_US.UTF-8"
@@ -55,9 +55,10 @@ Index: pi-gen/pi-gen/config
 +DISABLE_FIRST_BOOT_USER_RENAME=1
 +FIRST_USER_PASS="T1aVyApUeLXaS2RdDcQfCVamT"
 +ENABLE_SSH=1
-+STAGE_LIST="stage0 stage1 stage2"
++STAGE_LIST="stage0 stage1 stage2 stage2-riverhousepi"
 +PUBKEY_SSH_FIRST_USER="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAZFjS2cZU5XADXKGga8tIPdrSjy1guUGW5o5kDn0dcKJODYk30dC635btTw2tiD3/QpNz9STfVpkWTMR5wASQ4fbhoWHgUMXn/GC6Z5+BQ86n5X9jNCGWocQhL5WdJqmoumjpSh/ZOnztPbZawploFdYD8EJCcpRGSPQeisiJv1AgC3OGw9jC78SW+70w55qbK+xtqVtn2AwzdrlXv9PgJOeZDSsaDvJHzrGQd7FEVMcjjDkf6tLMGFjoZUwcAZxQrXMl0q09+bdDXn8u6ZfAGlUQRygwxXdsZ9eYajlLCFV3OC643imGJ26xLFQNW9D3xrmDE2RBrbTK8lZDoeH5 nicholas@Nicholass-MBP"
 +PUBKEY_ONLY_SSH=1
++APT_PROXY=192.168.16.129
 \ No newline at end of file
 Index: pi-gen/pi-gen/stage2/01-sys-tweaks/00-packages
 ===================================================================
@@ -114,4 +115,18 @@ Index: pi-gen/pi-gen/stage2-riverhousepi/prerun.sh
 +if [ ! -d "${ROOTFS_DIR}" ]; then
 +	copy_previous
 +fi
+\ No newline at end of file
+Index: pi-gen/pi-gen/stage2/SKIP_IMAGES
+===================================================================
+--- /dev/null
++++ pi-gen/pi-gen/stage2/SKIP_IMAGES
+@@ -0,0 +1 @@
++## Ignore
+\ No newline at end of file
+Index: pi-gen/pi-gen/stage2/SKIP_NOOBS
+===================================================================
+--- /dev/null
++++ pi-gen/pi-gen/stage2/SKIP_NOOBS
+@@ -0,0 +1 @@
++## Ignore
 \ No newline at end of file

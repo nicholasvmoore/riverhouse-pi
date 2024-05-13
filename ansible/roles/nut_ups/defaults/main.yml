@@ -1,0 +1,13 @@
+---
+# Default variables for nut_ups
+
+nut_ups_ups_name: "ups0"
+nut_ups_idVendor: "0764" # Cyber Power Systems, Inc.
+nut_ups_idProduct: "0501" # CP1600 AVR UPS
+nut_ups_driver: "usbhid-ups"
+nut_ups_ups_model_name: "CP1600 AVR"
+nut_ups_port: "auto"
+nut_ups_os_nut_group: "nut"
+nut_ups_mode: "none"
+nut_ups_listen_address: 127.0.0.1
+nut_ups_listen_port: 3493

@@ -37,6 +37,6 @@
 - name: Enable disable-leds.service systemd unit
   ansible.builtin.systemd_service:
     name: disable-leds.service
-    enabled: true
+    enabled: false # Fixup: Doesn't work on pi zero 2w, disabling for now
     daemon_reload: true
-    state: started
+    state: stopped # Fixup: Doesn't work on pi zero 2w, disabling for now

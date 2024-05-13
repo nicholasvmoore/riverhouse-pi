@@ -54,4 +54,5 @@ Edit the files, when ready save it
 
 ```bash
 quilt refresh riverhouse-pi.diff
+quilt pop -a
 ```

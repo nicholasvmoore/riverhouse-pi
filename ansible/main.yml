@@ -1,6 +1,7 @@
 ---
-- name: Configure VPN RockPi-E.
-  hosts: vpn
+
+- name: Configure Riverhouse
+  hosts: riverhouse
   become: true
 
   pre_tasks:
@@ -36,9 +37,19 @@
           - iperf3
           - iptables
           - vim
+          - git
         state: present
 
     - name: Disable LEDs
       ansible.builtin.import_tasks: tasks/disable_leds.yml
       tags:
         - disable_leds
+
+- name: Configure pi-zero
+  hosts: riverhouse:pi-zero
+  tasks:
+    - name: Setup NUT UPS Server
+      ansible.builtin.import_role:
+        name: nut_ups
+      tags:
+        - nut_ups
