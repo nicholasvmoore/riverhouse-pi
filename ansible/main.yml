@@ -42,4 +42,3 @@
       ansible.builtin.import_tasks: tasks/disable_leds.yml
       tags:
         - disable_leds
-    
