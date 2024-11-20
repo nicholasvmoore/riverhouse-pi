@@ -10,8 +10,8 @@ start_service() {
     ./etc/profile
     echo "Starting modem python script"
     ubus -t 300 wait_for network.interface.modem_0001_4
-    python /root/restart-modem.py &
     procd_set_param stdout 1
     procd_set_param stderr 1
+    procd_set_param command /usr/bin/python3 /root/restart-modem.py
     procd_close_instance
 }
